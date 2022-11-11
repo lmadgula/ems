@@ -11,39 +11,23 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
+
 import com.ems.dao.DbConnection;
+import com.ems.model.Employee;
+import com.ems.service.EmployeeService;
 
 @WebServlet(urlPatterns = "/employees")
 public class EmployeeServlet extends HttpServlet {
 
+    EmployeeService empService = new EmployeeService();
     @Override
     protected void doGet(
             HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-
-            String query
-                    = "select * from employees"; // query to be run
-            Connection con = DbConnection.getConn();
-
-            System.out.println(
-                    "Connection Established successfully");
-            Statement st = con.createStatement();
-            ResultSet rs
-                    = st.executeQuery(query); // Execute query
-            rs.next();
-            String fname = rs.getString("firstname"); // Retrieve name from db
-            String lname = rs.getString("lastname");
-            String email = rs.getString("email");
-            request.setAttribute("fname", fname);
-            request.setAttribute("lname", lname);
-            request.setAttribute("email", email);
-
-
-            //System.out.println(name); // Print result on console
-            st.close(); // close statement
-            con.close(); // close connection
-            System.out.println("Connection Closed....");
+            List<Employee> employees = empService.getAll();
+            request.setAttribute("employees", employees);
         } catch(Exception e) {
             e.printStackTrace();
         }

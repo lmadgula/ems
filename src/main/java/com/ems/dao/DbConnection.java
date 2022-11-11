@@ -10,6 +10,7 @@ public class DbConnection {
         if (CONN == null) {
             try {
                 String url = "jdbc:mysql://localhost:3306/ems";
+                //http://localhost:8080/ems/
                 String username = "root";
                 String password = "laasyam1";
                 Class.forName("com.mysql.cj.jdbc.Driver");

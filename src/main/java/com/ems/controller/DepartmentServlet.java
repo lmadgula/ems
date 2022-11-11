@@ -1,6 +1,9 @@
 package com.ems.controller;
 
 import com.ems.dao.DbConnection;
+import com.ems.model.Department;
+import com.ems.model.Employee;
+import com.ems.service.DepartmentService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,35 +15,19 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 
 @WebServlet(urlPatterns = "/department")
 public class DepartmentServlet extends HttpServlet {
 
+    DepartmentService depService = new DepartmentService();
     @Override
     protected void doGet(
             HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
-        try{
-            String query
-                    = "select * from department"; // query to be run
-            Connection con = DbConnection.getConn();
-
-            System.out.println(
-                    "Connection Established successfully");
-            Statement st = con.createStatement();
-            ResultSet rs
-                    = st.executeQuery(query); // Execute query
-            rs.next();
-            String name = rs.getString("departmant_nm"); // Retrieve name from db
-
-            request.setAttribute("name", name);
-
-
-
-            //System.out.println(name); // Print result on console
-            st.close(); // close statement
-            con.close(); // close connection
-            System.out.println("Connection Closed....");
+            throws ServletException, IOException {
+        try {
+            List<Department> departments = depService.getAll();
+            request.setAttribute("departments", departments);
         } catch(Exception e) {
             e.printStackTrace();
         }
