@@ -1,8 +1,6 @@
 package com.ems.controller;
 
-import com.ems.dao.DbConnection;
 import com.ems.model.Department;
-import com.ems.model.Employee;
 import com.ems.service.DepartmentService;
 
 import javax.servlet.RequestDispatcher;
@@ -12,21 +10,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/department")
 public class DepartmentServlet extends HttpServlet {
 
-    DepartmentService depService = new DepartmentService();
+    private DepartmentService deptService = new DepartmentService();
+
     @Override
     protected void doGet(
             HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            List<Department> departments = depService.getAll();
+            List<Department> departments = deptService.getAll();
             request.setAttribute("departments", departments);
         } catch(Exception e) {
             e.printStackTrace();
@@ -36,5 +33,20 @@ public class DepartmentServlet extends HttpServlet {
         dispatcher.forward(request, response);
         }
 
+    @Override
+    protected void doPut(
+        HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        try {
+            Department toAdd = new Department();
+            toAdd.setDeptName(request.getParameter("deptName"));
+            deptService.create(toAdd);
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+        catch (SQLException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "");
+        }
     }
+
+}
 

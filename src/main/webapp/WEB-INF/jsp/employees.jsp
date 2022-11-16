@@ -6,6 +6,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Bootstrap Table with Add and Delete Row Feature</title>
+    <script>
+        const newRowSupplier = function(){
+            const newRow = '<td><input type="text" class="form-control" name="fName" id="fName"></td>' +
+                           '<td><input type="text" class="form-control" name="lName" id="lName"></td>' +
+                           '<td><input type="date" class="form-control" name="dob" id="dob"></td>' +
+                           '<td><input type="email" class="form-control" name="email" id="email"></td>' +
+                           '<td><select name="department" id="department"><option value="1">HR</option><option value="2">Admin</option></select></td>';
+            return newRow;
+        }
+    </script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -15,6 +25,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/table.js"></script>
+
 </head>
 
     <body>

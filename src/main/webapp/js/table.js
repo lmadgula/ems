@@ -3,24 +3,18 @@ $(document).ready(function(){
 	var actions = $("table td:last-child").html();
 
 	// Append table with add row form on add new button click
-    $(".add-new").click(function(){
+    $(".add-new").on('click', { newRowHtmlCallback : newRowSupplier }, function(e){
 		$(this).attr("disabled", "disabled");
 		var index = $("table tbody tr:last-child").index();
-        var row = '<tr>' +
-            '<td><input type="text" class="form-control" name="fName" id="fName"></td>' +
-            '<td><input type="text" class="form-control" name="lName" id="lName"></td>' +
-            '<td><input type="date" class="form-control" name="dob" id="dob"></td>' +
-            '<td><input type="email" class="form-control" name="email" id="email"></td>' +
-            '<td><select name="department" id="department"><option value="1">HR</option><option value="2">Admin</option></select></td>' +
-			'<td>' + actions + '</td>' +
-        '</tr>';
+		var rowHtml = e.data.newRowHtmlCallback();
+        var row = '<tr>' + rowHtml + '<td>' + actions + '</td> </tr>';
     	$("table").append(row);
 		$("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
         $('[data-toggle="tooltip"]').tooltip();
     });
 
 	// Add row on add button click
-	$(document).on("click", ".add", function(){
+	$(document).on("click", ".add", { addRowCallback : addRowSupplier }, function(e){
 		var empty = false;
 		var input = $(this).parents("tr").find('input[type="text"]');
         input.each(function(){
@@ -33,11 +27,19 @@ $(document).ready(function(){
 		});
 		$(this).parents("tr").find(".error").first().focus();
 		if(!empty){
-			input.each(function(){
-				$(this).parent("td").html($(this).val());
-			});
-			$(this).parents("tr").find(".add, .edit").toggle();
-			$(".add-new").removeAttr("disabled");
+		    e.data.addRowCallback(
+                function(){
+                    input.each(function(){
+                        $(this).parent("td").html($(this).val());
+                    });
+                    $(this).parents("tr").find(".add, .edit").toggle();
+                    $(".add-new").removeAttr("disabled");
+                },
+                function(){
+                    $(this).addClass("error");
+                    empty = true;
+                }
+			);
 		}
     });
 
