@@ -25,9 +25,7 @@ public class DepartmentServiceTest extends TestCase {
 
     public void testDelete() throws SQLException {
         DepartmentService testObject = new DepartmentService();
-        Department testDept = new Department();
-        testDept.setDeptId(5);
-        testObject.delete(testDept);
+        testObject.delete(5);
     }
 
     public void testUpdate() throws SQLException {

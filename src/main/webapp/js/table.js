@@ -53,8 +53,11 @@ $(document).ready(function(){
     });
 
 	// Delete row on delete button click
-	$(document).on("click", ".delete", function(){
-        $(this).parents("tr").remove();
-		$(".add-new").removeAttr("disabled");
+	$(document).on("click", ".delete", { deleteRowCallback : deleteRowSupplier }, function(e){
+	    e.data.deleteRowCallback($(this), function(){
+	        $(this).parents("tr").remove();
+            $(".add-new").removeAttr("disabled");
+	    });
+
     });
 });

@@ -33,11 +33,11 @@ public class DepartmentService {
         prepStmt.executeUpdate();
     }
 
-    public void delete(Department department) throws SQLException {
+    public void delete(int deptId) throws SQLException {
         String query = "delete from department where department_id = ?";
         Connection con = DbConnection.getConn();
         PreparedStatement prepStmt = con.prepareStatement(query);
-        prepStmt.setInt(1, department.getDeptId());
+        prepStmt.setInt(1, deptId);
         int updateCount = prepStmt.executeUpdate();
         System.out.println("rows impacted " + updateCount);
     }
