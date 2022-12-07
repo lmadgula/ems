@@ -16,7 +16,8 @@ $(document).ready(function(){
 	// Add row on add button click
 	$(document).on("click", ".add", { addRowCallback : addRowSupplier }, function(e){
 		var empty = false;
-		var input = $(this).parents("tr").find('input[type="text"]');
+		const thisRow = $(this).parents("tr");
+		var input = $(thisRow).find('input[type="text"]');
         input.each(function(){
 			if(!$(this).val()){
 				$(this).addClass("error");
@@ -25,14 +26,14 @@ $(document).ready(function(){
                 $(this).removeClass("error");
             }
 		});
-		$(this).parents("tr").find(".error").first().focus();
+		$(thisRow).find(".error").first().focus();
 		if(!empty){
 		    e.data.addRowCallback(
                 function(){
                     input.each(function(){
                         $(this).parent("td").html($(this).val());
                     });
-                    $(this).parents("tr").find(".add, .edit").toggle();
+                    $(thisRow).find(".add, .edit").toggle();
                     $(".add-new").removeAttr("disabled");
                 },
                 function(){
@@ -54,8 +55,9 @@ $(document).ready(function(){
 
 	// Delete row on delete button click
 	$(document).on("click", ".delete", { deleteRowCallback : deleteRowSupplier }, function(e){
+	    const thisRow = $(this).parents("tr");
 	    e.data.deleteRowCallback($(this), function(){
-	        $(this).parents("tr").remove();
+	        $(thisRow).remove();
             $(".add-new").removeAttr("disabled");
 	    });
 

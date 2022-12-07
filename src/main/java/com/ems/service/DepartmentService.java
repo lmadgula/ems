@@ -25,12 +25,21 @@ public class DepartmentService {
         return result;
     }
 
-    public void create(Department department) throws SQLException {
-        String query = "Insert into department (departmant_nm) values (?)";
+    public int create(Department department) throws SQLException {
+        String queryToInsert = "Insert into department (departmant_nm) values (?)";
         Connection con = DbConnection.getConn();
-        PreparedStatement prepStmt = con.prepareStatement(query);
+        PreparedStatement prepStmt = con.prepareStatement(queryToInsert);
         prepStmt.setString(1, department.getDeptName());
         prepStmt.executeUpdate();
+        String queryToGetByName = "Select department_id from department where departmant_nm = ?";
+        prepStmt = con.prepareStatement(queryToGetByName);
+        prepStmt.setString(1, department.getDeptName());
+        var rs = prepStmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("department_id");
+        } else {
+            return -1;
+        }
     }
 
     public void delete(int deptId) throws SQLException {

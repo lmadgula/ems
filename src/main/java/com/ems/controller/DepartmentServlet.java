@@ -16,8 +16,8 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import static com.ems.controller.ServletUtils.getParameterMap;
 
 @WebServlet(urlPatterns = "/department")
 public class DepartmentServlet extends HttpServlet {
@@ -46,10 +46,16 @@ public class DepartmentServlet extends HttpServlet {
         try {
             Department toAdd = new Department();
             toAdd.setDeptName(request.getParameter("deptName"));
-            deptService.create(toAdd);
+            int id = deptService.create(toAdd);
+
+//            String json = new JsonObject().add("id", String.valueOf(id));
             response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType("application/json");  // Set content type of the response so that jQuery knows what it can expect.
+            response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
+            response.getWriter().write(id);
         }
         catch (SQLException e) {
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DB error occured while creating new Department");
         }
     }
@@ -65,35 +71,6 @@ public class DepartmentServlet extends HttpServlet {
         catch (SQLException e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "DB error occured while deleting department");
         }
-    }
-
-    public static Map<String, String> getParameterMap(HttpServletRequest request) {
-
-        BufferedReader br = null;
-        Map<String, String> dataMap = null;
-
-        try {
-
-            InputStreamReader reader = new InputStreamReader(
-                    request.getInputStream());
-            br = new BufferedReader(reader);
-
-            String data = br.readLine();
-
-            dataMap = Splitter.on('&')
-                    .trimResults()
-                    .withKeyValueSeparator(
-                            Splitter.on('=')
-                                    .limit(2)
-                                    .trimResults())
-                    .split(data);
-
-            return dataMap;
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        return dataMap;
     }
 
 }

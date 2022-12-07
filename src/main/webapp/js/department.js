@@ -28,7 +28,7 @@ const deleteRowSupplier = function(elem, successHandler){
             type: "DELETE",
             data: {"deptId": deptId},
             success: function(result) {
-                console.log('deleted successfull');
+                console.log('deleted successfully');
                 successHandler();
                 $('#notif').addClass('alert-success');
                 $('#notif').html("Department deleted successfully");
