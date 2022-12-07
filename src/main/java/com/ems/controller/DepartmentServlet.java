@@ -2,7 +2,7 @@ package com.ems.controller;
 
 import com.ems.model.Department;
 import com.ems.service.DepartmentService;
-import com.google.common.base.Splitter;
+import org.json.JSONObject;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,9 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -46,13 +44,20 @@ public class DepartmentServlet extends HttpServlet {
         try {
             Department toAdd = new Department();
             toAdd.setDeptName(request.getParameter("deptName"));
-            int id = deptService.create(toAdd);
+            int deptId = Integer.parseInt(request.getParameter("deptId"));
 
-//            String json = new JsonObject().add("id", String.valueOf(id));
+            if(deptId != -1){
+                toAdd.setDeptId(deptId);
+                deptService.update(toAdd);
+            } else {
+                deptId = deptService.create(toAdd);
+            }
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("deptId", deptId);
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/json");  // Set content type of the response so that jQuery knows what it can expect.
             response.setCharacterEncoding("UTF-8"); // You want world domination, huh?
-            response.getWriter().write(id);
+            response.getWriter().write(jsonResponse.toString());
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -61,7 +66,7 @@ public class DepartmentServlet extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<String, String> paramMap = getParameterMap(req);
         try {
             int deptId = Integer.parseInt(paramMap.get("deptId"));

@@ -41,7 +41,7 @@
                         <tbody>
                             <c:forEach var="dept" items="${departments}">
                                 <tr>
-                                    <td><input type = "hidden" value = "${dept.deptId}" class="deptId"/>${dept.deptName}</td>
+                                    <td><input type = "hidden" value = "${dept.deptId}" class="deptId"/><span>${dept.deptName}</span></td>
                                     <td>
                                         <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
                                         <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>

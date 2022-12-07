@@ -15,6 +15,7 @@ $(document).ready(function(){
 
 	// Add row on add button click
 	$(document).on("click", ".add", { addRowCallback : addRowSupplier }, function(e){
+	    console.log("add clicked");
 		var empty = false;
 		const thisRow = $(this).parents("tr");
 		var input = $(thisRow).find('input[type="text"]');
@@ -28,10 +29,10 @@ $(document).ready(function(){
 		});
 		$(thisRow).find(".error").first().focus();
 		if(!empty){
-		    e.data.addRowCallback(
+		    e.data.addRowCallback(thisRow,
                 function(){
                     input.each(function(){
-                        $(this).parent("td").html($(this).val());
+                        $(this).parent("td").html('<span>' + $(this).val() + '</span>');
                     });
                     $(thisRow).find(".add, .edit").toggle();
                     $(".add-new").removeAttr("disabled");
@@ -46,7 +47,7 @@ $(document).ready(function(){
 
 	// Edit row on edit button click
 	$(document).on("click", ".edit", function(){
-        $(this).parents("tr").find("td:not(:last-child)").each(function(){
+        $(this).parents("tr").find("td:not(:last-child)").find("span").each(function(){
 			$(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
 		});
 		$(this).parents("tr").find(".add, .edit").toggle();
